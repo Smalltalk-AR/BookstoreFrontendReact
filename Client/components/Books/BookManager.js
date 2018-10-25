@@ -5,6 +5,7 @@ import EditBookForm from './EditBookForm';
 import BookTable from './BookTable';
 import BookControlPanel from './BookControlPanel';
 const BookService = require('../../services/book-service');
+const AuthorService = require('../../services/author-service');
 
 
 class BookManager extends Component {
@@ -13,6 +14,7 @@ class BookManager extends Component {
         
         this.state = {
             books: [],
+            authors: [],
             selectedBook: null,
             isAddBookModalOpen: false,
             isEditBookModalOpen: false
@@ -32,8 +34,22 @@ class BookManager extends Component {
 
     componentDidMount() {
         this.listBooks();
+        this.listAuthors();
     }
 
+
+    listAuthors() {
+        AuthorService
+            .listAuthors()
+            .then(authors => {
+                this.setState({authors});
+                return;
+            })
+            .catch(error => {
+                console.log(error);
+                return;
+            });
+    }
 
     listBooks() {
         BookService
@@ -106,22 +122,26 @@ class BookManager extends Component {
 
         this.setState({ isAddBookModalOpen: false });
 
-        const { title, content, tags } = book;
+        const { title, editorial, releaseYear, author } = book;
 
         if (!title || title.length === 0) {
             throw Error('Title is required');
         }
 
-        if (!content || content.length === 0) {
-            throw Error('Content is required');
+        if (!editorial || editorial.length === 0) {
+            throw Error('Editorial is required');
         }
 
-        if (!Array.isArray(tags)) {
-            throw Error('Tags must be an array');
+        if (!releaseYear || releaseYear === 0) {
+            throw Error('Release year is required');
         }
+        if (!author || author === undefined) {
+            throw Error('Author is required');
+        }
+        
 
         BookService
-            .addBook(title, content, tags)
+            .addBook(title, editorial, releaseYear, author)
             .then(newBook => {             
                 BookService
                     .listBooks()
@@ -175,18 +195,21 @@ class BookManager extends Component {
     handleOnEditBook(book) {
         this.setState({ isEditBookModalOpen: false });
         
-        const { title, content, tags } = book;
+        const { title, editorial, releaseYear, author } = book;
         
         if (!title || title.length === 0) {
             throw Error('Title is required');
         }
-        
-        if (!content || content.length === 0) {
-            throw Error('Content is required');
+
+        if (!editorial || editorial.length === 0) {
+            throw Error('Editorial is required');
         }
-        
-        if (!Array.isArray(tags)) {
-            throw Error('Tags must be an array');
+
+        if (!releaseYear || releaseYear === 0) {
+            throw Error('Release year is required');
+        }
+        if (!author || author === undefined) {
+            throw Error('Author is required');
         }
 
         BookService
@@ -210,10 +233,10 @@ class BookManager extends Component {
         return (
             <div>                                
                 <Modal isOpen={this.state.isAddBookModalOpen} onRequestClose={this.handleOnCloseAddBookModal}>
-                    <AddBookForm onSaveBook={this.handleOnAddBook} onCloseModal={this.handleOnCloseAddBookModal} />
+                    <AddBookForm onSaveBook={this.handleOnAddBook} onCloseModal={this.handleOnCloseAddBookModal} authors= {this.state.authors} />
                 </Modal>
                 <Modal isOpen={this.state.isEditBookModalOpen} onRequestClose={this.handleOnCloseEditBookModal}>
-                    <EditBookForm onSaveBook={this.handleOnEditBook} onCloseModal={this.handleOnCloseEditBookModal} book={this.state.selectedBook} />
+                    <EditBookForm onSaveBook={this.handleOnEditBook} onCloseModal={this.handleOnCloseEditBookModal} book={this.state.selectedBook} authors= {this.state.authors} />
                 </Modal>
                 <div className="mb-3">
                     <BookControlPanel openAddBookModal={this.handleOpenAddBookModal} onFindBooks={this.handleOnFindBooks} />

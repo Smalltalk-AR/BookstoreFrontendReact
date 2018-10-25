@@ -19,7 +19,7 @@ const addAuthor = (firstName, lastName, country) => {
 
     return new Promise((resolve, reject) => {
         axios
-            .post(`${baseApiUrl}/authors`, { 
+            .post(`${baseApiUrl}/persons`, { 
                 'firstName': firstName,
                 'lastName': lastName,
                 'country': country })
@@ -43,7 +43,7 @@ const findAuthor = (id) => {
     
     return new Promise((resolve, reject) => {
         axios
-            .get(`${baseApiUrl}/authors/${id}`)
+            .get(`${baseApiUrl}/persons/${id}`)
             .then(response => {
                 resolve(response.data);
                 return;
@@ -61,7 +61,7 @@ const findAuthorsByFirstName = (firstName) => {
 
     return new Promise((resolve, reject) => {
         axios
-            .get(`${baseApiUrl}/authors?firstName=${firstName}`)
+            .get(`${baseApiUrl}/persons?firstName=${firstName}`)
             .then(response => {
                 resolve(response.data);
                 return;
@@ -78,7 +78,7 @@ const listAuthors = () => {
 
     return new Promise((resolve, reject) => {
         axios
-            .get(`${baseApiUrl}/authors`)
+            .get(`${baseApiUrl}/persons`)
             .then(response => {
                 resolve(response.data);
                 return;
@@ -99,7 +99,7 @@ const removeAuthor = (id) => {
 
     return new Promise((resolve, reject) => {
         axios
-            .delete(`${baseApiUrl}/authors/${id}`)
+            .delete(`${baseApiUrl}/persons/${id}`)
             .then(() => {
                 resolve();
                 return;
@@ -119,7 +119,7 @@ const removeAuthor = (id) => {
 const updateAuthor = (author) => {
     return new Promise((resolve, reject) => {
         axios
-            .put(`${baseApiUrl}/authors`, {author})
+            .put(`${baseApiUrl}/persons`, {author})
             .then(() => {
                 resolve();
                 return;

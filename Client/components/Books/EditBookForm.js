@@ -11,20 +11,22 @@ class EditBookForm extends Component {
         this.state = {
             id: props.book.id,
             title: props.book.title,
-            content: props.book.content,
-            tags: props.book.tags,
+            editorial: props.book.editorial,
+            releaseYear: props.book.releaseYear,
+            author: props.book.author,
             validationErrors: []
         };
 
         this.onTitleChange = this.onTitleChange.bind(this);
-        this.onContentChange = this.onContentChange.bind(this);
-        this.onTagsChange = this.onTagsChange.bind(this);
+        this.onEditorialChange = this.onEditorialChange.bind(this);
+        this.onReleaseYearChange = this.onReleaseYearChange.bind(this);
+        this.onAuthorChange = this.onAuthorChange.bind(this);
         this.onSave = this.onSave.bind(this);
     }
 
     
     onTitleChange(event) {
-        const title = event.target.value;
+        const title = event.target.value.trim();
 
         this.validateTitle(title);
 
@@ -32,42 +34,52 @@ class EditBookForm extends Component {
     }
 
 
-    onContentChange(event) {
-        const content = event.target.value;
+    onEditorialChange(event) {
+        const editorial = event.target.value.trim();
 
-        this.validateContent(content);
+        this.validateEditorial(editorial);
         
-        this.setState({ content: content });
+        this.setState({ editorial: editorial });
     }
 
 
-    onTagsChange(event) {
-        const tags = event.target.value;
+    onReleaseYearChange(event) {
+        const releaseYear = event.target.value.trim();
 
-        if (this.validateTags(tags)) {            
-            this.setState({ tags: tags.split(',')});
+        if (this.validateReleaseYear(releaseYear)) {            
+            this.setState({ releaseYear: releaseYear});
         }        
     }
 
+    onAuthorChange(event) {
+        const author = event.target.value.trim();
+
+        this.validateAuthor(author);
+
+        this.setState({ author: author });
+    }
     
+  
     onSave(event) {
         event.preventDefault();
 
         if (this.state.validationErrors && this.state.validationErrors.length === 0) {
-            const { title, content } = this.state;
+            const { title, editorial, releaseYear, author } = this.state;
             
-            if (this.validateTitle(title) && this.validateContent(content)) {
+            if (this.validateTitle(title) && this.validateEditorial(editorial) && this.validateReleaseYear(releaseYear) && this.validateAuthor(author)) {
                 this.props.onSaveBook({
                     id: this.state.id,
                     title: this.state.title,
-                    content: this.state.content,
-                    tags: this.state.tags
+                    editorial: this.state.editorial,
+                    releaseYear: this.state.releaseYear,
+                    author: this.state.author
                 });
             }
         }
     }
     
 
+   
     validateTitle(title) {
         const message = 'Title is required';
 
@@ -81,10 +93,10 @@ class EditBookForm extends Component {
     }
 
 
-    validateContent(content) {
-        const message = 'Content is required';
+    validateEditorial(editorial) {
+        const message = 'Editorial is required';
 
-        if (content === '') {
+        if (editorial === '') {
             this.addValidationError(message);
             return false;
         } else {
@@ -94,21 +106,27 @@ class EditBookForm extends Component {
     }
 
 
-    validateTags(tags) {
-        const message = 'Tags must be a comma separated list';
+    validateReleaseYear(releaseYear) {
+        const message = 'Release year is required';
         
-        if (tags !== '') {
-            var regex = new RegExp(/^([\w]+[\s]*[,]?[\s]*)+$/);
-
-            if (!regex.test(tags)) {                
-                this.addValidationError(message);
-                return false;
-            } else {
-                this.removeValidationError(message);
-                return true;
-            }
+        if (releaseYear === '') {
+            this.addValidationError(message);
+            return false;
         } else {
             this.removeValidationError(message);
+            return true;
+        }
+    }
+
+    validateAuthor(author) {
+        const message = 'Author is required';
+
+        if (author === undefined) {
+            this.addValidationError(message);
+            return false;
+        } else {
+            this.removeValidationError(message);
+            return true;
         }
     }
 
@@ -159,16 +177,22 @@ class EditBookForm extends Component {
                 {validationErrorSummary}
                 <form onSubmit={this.onSave} className="mt-2">
                     <div className="form-group">
-                        <label htmlFor="title">Title</label>
-                        <input type="text" className="form-control" name="title" autoFocus onChange={this.onTitleChange} value={this.state.title}/>
+                        <label htmlFor="title">Título</label>
+                        <input type="text" className="form-control" name="title" autoFocus onChange={this.onTitleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="content">Content</label>
-                        <textarea className="form-control" name="content" rows="3" onChange={this.onContentChange} value={this.state.content}></textarea>
+                        <label htmlFor="editorial">Editorial</label>
+                        <input type="text" className="form-control" name="editorial" autoFocus onChange={this.onEditorialChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="tags">Tags</label>
-                        <input type="text" className="form-control" name="tags" onChange={this.onTagsChange} value={this.state.tags.join(',')} />
+                        <label htmlFor="releaseYear">Año de lanzamiento</label>
+                        <input type="text" className="form-control" name="releaseYear" onChange={this.onReleaseYearChange} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="author">Autor</label>
+                        <select  className="form-control" name="author" onChange={this.onAuthorChange}>
+                            {this.createSelectAuthors()}
+                        </select>
                     </div>
                     <div className="form-group row">
                         <div className="col-sm-4 col-md-3 col-xl-2 ml-auto">
@@ -193,7 +217,8 @@ class EditBookForm extends Component {
 EditBookForm.propTypes = {
     book: PropTypes.object,
     onCloseModal: PropTypes.func,
-    onSaveBook: PropTypes.func
+    onSaveBook: PropTypes.func,
+    authors: PropTypes.array
 };
 
 export default EditBookForm;

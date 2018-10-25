@@ -27,7 +27,7 @@ class AuthorControlPanel extends Component {
                             <i className="fa fa-plus"></i>
                         </button>
                     </span>
-                    <input type="text" className="form-control" placeholder="Buscar autor por título ..." value={this.state.firstName} onChange={this.onSearchFirstNameChanged} />
+                    <input type="text" className="form-control" placeholder="Buscar autor por nombre ..." value={this.state.firstName} onChange={this.onSearchFirstNameChanged} />
                     <span className="input-group-btn">
                         <button className="btn btn-primary" type="button" onClick={() => this.props.onFindAuthors(this.state.firstName)} >
                             <i className="fa fa-search"></i>

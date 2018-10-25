@@ -10,14 +10,15 @@ class AddBookForm extends Component {
 
         this.state = {
             title: '',
-            content: '',
-            tags: [],
+            editorial: '',
+            releaseYear: 0,
+            author: undefined,
             validationErrors: []
         };
-
         this.onTitleChange = this.onTitleChange.bind(this);
-        this.onContentChange = this.onContentChange.bind(this);
-        this.onTagsChange = this.onTagsChange.bind(this);
+        this.onEditorialChange = this.onEditorialChange.bind(this);
+        this.onReleaseYearChange = this.onReleaseYearChange.bind(this);
+        this.onAuthorChange = this.onAuthorChange.bind(this);
         this.onSave = this.onSave.bind(this);
     }
 
@@ -31,31 +32,38 @@ class AddBookForm extends Component {
     }
 
 
-    onContentChange(event) {
-        const content = event.target.value.trim();
+    onEditorialChange(event) {
+        const editorial = event.target.value.trim();
 
-        this.validateContent(content);
+        this.validateEditorial(editorial);
         
-        this.setState({ content: content });
+        this.setState({ editorial: editorial });
     }
 
 
-    onTagsChange(event) {
-        const tags = event.target.value.trim();
+    onReleaseYearChange(event) {
+        const releaseYear = event.target.value.trim();
 
-        if (this.validateTags(tags)) {            
-            this.setState({ tags: tags.split(',')});
+        if (this.validateReleaseYear(releaseYear)) {            
+            this.setState({ releaseYear: releaseYear});
         }        
     }
 
-    
+    onAuthorChange(event) {
+        const author = event.target.value.trim();
+
+        this.validateAuthor(author);
+
+        this.setState({ author: author });
+    }
+
     onSave(event) {
         event.preventDefault();
 
         if (this.state.validationErrors && this.state.validationErrors.length === 0) {
-            const { title, content } = this.state;
+            const { title, editorial, releaseYear, author } = this.state;
             
-            if (this.validateTitle(title) && this.validateContent(content)) {
+            if (this.validateTitle(title) && this.validateEditorial(editorial) && this.validateReleaseYear(releaseYear) && this.validateAuthor(author)) {
                 this.props.onSaveBook(this.state);
             }
         }
@@ -75,10 +83,10 @@ class AddBookForm extends Component {
     }
 
 
-    validateContent(content) {
-        const message = 'Content is required';
+    validateEditorial(editorial) {
+        const message = 'Editorial is required';
 
-        if (content === '') {
+        if (editorial === '') {
             this.addValidationError(message);
             return false;
         } else {
@@ -88,24 +96,29 @@ class AddBookForm extends Component {
     }
 
 
-    validateTags(tags) {
-        const message = 'Tags must be a comma separated list';
+    validateReleaseYear(releaseYear) {
+        const message = 'Release year is required';
         
-        if (tags !== '') {
-            var regex = new RegExp(/^([\w]+[\s]*[,]?[\s]*)+$/);
-
-            if (!regex.test(tags)) {                
-                this.addValidationError(message);
-                return false;
-            } else {
-                this.removeValidationError(message);
-                return true;
-            }
+        if (releaseYear === '') {
+            this.addValidationError(message);
+            return false;
         } else {
             this.removeValidationError(message);
+            return true;
         }
     }
 
+    validateAuthor(author) {
+        const message = 'Author is required';
+
+        if (author === undefined) {
+            this.addValidationError(message);
+            return false;
+        } else {
+            this.removeValidationError(message);
+            return true;
+        }
+    }
     
     addValidationError(message) {        
         this.setState((previousState) => {
@@ -130,6 +143,16 @@ class AddBookForm extends Component {
         });      
     }
 
+    createSelectAuthors() {
+        let items = [];         
+        for (let i = 0; i <= this.props.authors.length-1; i++) { 
+            let actualAuthor = this.props.authors[i];           
+            items.push(<option key={i} value={actualAuthor}>{actualAuthor.firstName}</option>);   
+          
+        }
+        return items;
+    }  
+
     
     render() {
 
@@ -153,16 +176,22 @@ class AddBookForm extends Component {
                 {validationErrorSummary}
                 <form onSubmit={this.onSave} className="mt-2">
                     <div className="form-group">
-                        <label htmlFor="title">Title</label>
+                        <label htmlFor="title">Título</label>
                         <input type="text" className="form-control" name="title" autoFocus onChange={this.onTitleChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="content">Content</label>
-                        <textarea className="form-control" name="content" rows="3" onChange={this.onContentChange}></textarea>
+                        <label htmlFor="editorial">Editorial</label>
+                        <input type="text" className="form-control" name="editorial" autoFocus onChange={this.onEditorialChange} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="tags">Tags</label>
-                        <input type="text" className="form-control" name="tags" onChange={this.onTagsChange} />
+                        <label htmlFor="releaseYear">Año de lanzamiento</label>
+                        <input type="text" className="form-control" name="releaseYear" onChange={this.onReleaseYearChange} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="author">Autor</label>
+                        <select  className="form-control" name="author" onChange={this.onAuthorChange} value="">
+                            {this.createSelectAuthors()}
+                        </select>
                     </div>
                     <div className="form-group row">
                         <div className="col-sm-4 col-md-3 col-xl-2 ml-auto">
@@ -186,7 +215,8 @@ class AddBookForm extends Component {
 
 AddBookForm.propTypes = {
     onCloseModal: PropTypes.func,
-    onSaveBook: PropTypes.func
+    onSaveBook: PropTypes.func,
+    authors: PropTypes.array
 };
 
 export default AddBookForm;

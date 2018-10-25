@@ -21,12 +21,9 @@ const BookTable = (props) => {
                     </div>                
                 </td>
                 <td className="align-middle">{book.title}</td>
-                <td className="align-middle">
-                    <span className="d-inline-block text-truncate" style={{maxWidth: '200px'}}>
-                        {book.content}
-                    </span>                
-                </td>
-                <td className="align-middle">{`${new Date(book.updatedDate).toISOString().slice(0, 10)} ${new Date(book.updatedDate).toISOString().slice(11, 16)}`}</td>
+                <td className="align-middle"> {book.editorial}</td>
+                <td className="align-middle">{book.releaseYear}</td>
+                <td className="align-middle">{book.author}</td>
             </tr>
         );
     });
@@ -38,8 +35,9 @@ const BookTable = (props) => {
                     <tr>
                         <th></th>
                         <th className="align-middle text-center">Título</th>
-                        <th className="align-middle text-center">Contenido</th>
-                        <th className="align-middle text-center">Fecha</th>
+                        <th className="align-middle text-center">Editorial</th>
+                        <th className="align-middle text-center">Año lanzamiento</th>
+                        <th className="align-middle text-center">Autor</th>
                     </tr>
                 </thead>
                 <tbody>

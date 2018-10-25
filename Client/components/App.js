@@ -9,7 +9,7 @@ export default class App extends Component {
         super();
 
         this.state = {
-            title: 'Bookdtore App',
+            title: 'Bookstore App',
             description: 'A basic example of CRUD app for books and authors'
         };
     }
