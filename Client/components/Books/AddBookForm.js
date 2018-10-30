@@ -48,10 +48,14 @@ class AddBookForm extends Component {
             this.setState({ releaseYear: releaseYear});
         }        
     }
+    authorOfId(authorId) {
+        return this.props.authors.find(e => e.id == authorId);
+    } 
 
     onAuthorChange(event) {
-        const author = event.target.value.trim();
+        const authorId = event.target.value.trim();
 
+        const author = this.authorOfId(authorId);
         this.validateAuthor(author);
 
         this.setState({ author: author });
@@ -147,11 +151,12 @@ class AddBookForm extends Component {
         let items = [];         
         for (let i = 0; i <= this.props.authors.length-1; i++) { 
             let actualAuthor = this.props.authors[i];           
-            items.push(<option key={i} value={actualAuthor}>{actualAuthor.firstName}</option>);   
+            items.push(<option key={i} value={actualAuthor.id}>{actualAuthor.firstName}</option>);   
           
         }
         return items;
     }  
+   
 
     
     render() {
@@ -189,7 +194,7 @@ class AddBookForm extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="author">Autor</label>
-                        <select  className="form-control" name="author" onChange={this.onAuthorChange} value="">
+                        <select  className="form-control" name="author" onChange={this.onAuthorChange} >
                             {this.createSelectAuthors()}
                         </select>
                     </div>

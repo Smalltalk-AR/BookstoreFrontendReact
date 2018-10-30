@@ -12,7 +12,7 @@ const AuthorTable = (props) => {
             <tr key={author.id.toString()} className={classes}>
                 <td className="align-middle" style={{width: '80px'}}>
                     <div className="d-flex flex-row">
-                        <a data-toggle="tooltip" data-placement="top" title="Editar Autor" className="p-2" onClick={() => props.onOpenEditAuthorModal(author.id)}>
+                        <a data-toggle="tooltip" data-placement="top" title="Editar Autor" className="p-2" onClick={() => props.onOpenEditAuthorModal(author)}>
                             <i className="fa fa-pencil fa-lg text-primary"></i>
                         </a>
                         <a data-toggle="tooltip" data-placement="top" title="Borrar Autor" className="p-2" onClick={() => props.onDeleteAuthor(author.id)}>

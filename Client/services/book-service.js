@@ -15,7 +15,7 @@ const baseApiUrl = 'http://localhost:1710';
 
 // add book
 
-const addBook = (title, editorial, releaseYear, authorId) => {
+const addBook = (title, editorial, releaseYear, author) => {
 
     return new Promise((resolve, reject) => {
         axios
@@ -23,7 +23,13 @@ const addBook = (title, editorial, releaseYear, authorId) => {
                 'title': title,
                 'editorial': editorial,
                 'releaseYear': releaseYear,
-                'authorId': authorId })
+                'author': {
+                    'id': author.id,
+                    'firstName': author.firstName,
+                    'lastName': author.lastName,
+                    'country': author.country
+                } 
+            })
             .then((result) => {
                 resolve(result.data);
             })

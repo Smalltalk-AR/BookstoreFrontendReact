@@ -119,7 +119,7 @@ const removeAuthor = (id) => {
 const updateAuthor = (author) => {
     return new Promise((resolve, reject) => {
         axios
-            .put(`${baseApiUrl}/persons`, {author})
+            .put(`${baseApiUrl}/persons/${author.id}`, author)
             .then(() => {
                 resolve();
                 return;

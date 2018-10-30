@@ -23,7 +23,7 @@ const BookTable = (props) => {
                 <td className="align-middle">{book.title}</td>
                 <td className="align-middle"> {book.editorial}</td>
                 <td className="align-middle">{book.releaseYear}</td>
-                <td className="align-middle">{book.author}</td>
+                <td className="align-middle">{book.author.firstName}</td>
             </tr>
         );
     });

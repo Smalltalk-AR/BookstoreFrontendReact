@@ -54,9 +54,9 @@ class EditAuthorForm extends Component {
         event.preventDefault();
 
         if (this.state.validationErrors && this.state.validationErrors.length === 0) {
-            const { firstName, lastName } = this.state;
+            const { firstName, lastName, country } = this.state;
             
-            if (this.validateFirstName(firstName) && this.validateLastName(lastName)) {
+            if (this.validateFirstName(firstName) && this.validateLastName(lastName) && this.validateCountry(country)) {
                 this.props.onSaveAuthor({
                     id: this.state.id,
                     firstName: this.state.firstName,
@@ -158,11 +158,11 @@ class EditAuthorForm extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="lastName">Apellido</label>
-                        <input type="text" className="form-control" name="lastName" autoFocus onChange={this.onLastNameChange} />
+                        <input type="text" className="form-control" name="lastName" autoFocus onChange={this.onLastNameChange}  value={this.state.lastName} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="country">Pais</label>
-                        <input type="text" className="form-control" name="country" onChange={this.onCountryChange} value={this.state.country.join(',')} />
+                        <input type="text" className="form-control" name="country" onChange={this.onCountryChange} value={this.state.country} />
                     </div>
                     <div className="form-group row">
                         <div className="col-sm-4 col-md-3 col-xl-2 ml-auto">

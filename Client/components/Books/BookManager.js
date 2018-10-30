@@ -122,7 +122,7 @@ class BookManager extends Component {
 
         this.setState({ isAddBookModalOpen: false });
 
-        const { title, editorial, releaseYear, author } = book;
+        const { title, editorial, releaseYear, author} = book;
 
         if (!title || title.length === 0) {
             throw Error('Title is required');
@@ -163,11 +163,13 @@ class BookManager extends Component {
 
 
     handleOpenAddBookModal() {
+        this.listAuthors();
         this.setState({isAddBookModalOpen: true});
     }
 
 
     handleOnCloseEditBookModal() {
+        this.listAuthors();
         this.setState({isEditBookModalOpen: false});
     }
 

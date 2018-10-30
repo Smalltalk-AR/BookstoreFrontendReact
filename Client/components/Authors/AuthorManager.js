@@ -152,23 +152,15 @@ class AuthorManager extends Component {
     }
 
 
-    handleOpenEditAuthorModal(authorId) {
+    handleOpenEditAuthorModal(author) {
 
-        if (!authorId || authorId < 1) {
-            throw Error('Cannot edit author. Invalid author id specified.');
+        if (!author) {
+            throw Error('Cannot edit.Invalid author specified.');
         }
 
-        AuthorService
-            .findAuthor(authorId)
-            .then(author => {
-                this.setState({selectedAuthor: author});
-                this.setState({isEditAuthorModalOpen: true});
-                return;
-            })
-            .catch(error => {
-                console.log(error);
-                return;
-            });
+        this.setState({selectedAuthor: author, });
+        this.setState({isEditAuthorModalOpen: true});
+         
     }
 
 
